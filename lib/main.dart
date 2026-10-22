@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+void main() => runApp(const DirectoryApp());
+
 // Plain data class: all fields are final and the constructor is const, so every Student is immutable.
 class Student {
   final String name;
@@ -16,6 +18,35 @@ const List<Student> students = [
   Student(name: 'Kaiser Lim', course: 'BS Computer Engineering', yearLevel: 4, email: 'kaiser.lim@school.edu'),
   Student(name: 'Agatha De Ocampo', course: 'BS Information Technology', yearLevel: 3, email: 'agatha.deocampo@school.edu'),
 ];
+
+// Stateless: it only builds a MaterialApp from fixed values and nothing in it ever changes on its own.
+class DirectoryApp extends StatelessWidget {
+  const DirectoryApp({super.key});
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        title: 'Campus Directory',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(colorSchemeSeed: Colors.blueAccent, useMaterial3: true), // BlueAccent theme seed color
+        home: const DirectoryScreen(),
+      );
+}
+
+// Stateless: the screen only shows the hard-coded students list; if the list changed, the parent would rebuild it with new data.
+class DirectoryScreen extends StatelessWidget {
+  const DirectoryScreen({super.key});
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Campus Directory'),
+          backgroundColor: Theme.of(context).colorScheme.primary, // Solid colored AppBar with white text
+          foregroundColor: Colors.white,
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(16), // Extra padding around the whole list
+          children: [const SectionHeader(title: 'Students'), for (final s in students) StudentCard(student: s)],
+        ),
+      );
+}
 
 // Stateless: it only displays the title it receives through its constructor.
 class SectionHeader extends StatelessWidget {
